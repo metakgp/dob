@@ -1,0 +1,22 @@
+services:
+  mysql:
+    build: "./mysql"
+    networks:
+      mysql-network:
+        aliases:
+          - mysql-of-babel
+    volumes:
+      - db-volume:/var/lib/mysql
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=true
+      - MYSQL_USER=metakgp_user
+      - MYSQL_DATABASE=metakgp_db
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
+networks:
+  metaploy-private-network:
+    external: true
+    name: metaploy-private-network
+
+volumes:
+  db-volume:
