@@ -12,8 +12,6 @@ services:
         - POSTGRES_DB=${DATABASE_NAME}
         - PGPORT=${DATABASE_PORT}
         - PGHOST=${DATABASE_HOST}
-      ports:
-        - ${DATABASE_PORT}:${DATABASE_PORT}
       volumes:
         - db-volume:/var/lib/postgresql/data
 
