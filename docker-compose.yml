@@ -1,17 +1,21 @@
 services:
-  mysql:
-    build: "./mysql"
-    networks:
-      mysql-network:
-        aliases:
-          - mysql-of-babel
-    volumes:
-      - db-volume:/var/lib/mysql
-    environment:
-      - MYSQL_RANDOM_ROOT_PASSWORD=true
-      - MYSQL_USER=metakgp_user
-      - MYSQL_DATABASE=metakgp_db
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+  database:
+      image: postgres
+      restart: always
+      networks:
+        metaploy-private-network:
+          aliases:
+            - postgres-of-babel
+      environment:
+        - POSTGRES_USER=${DATABASE_USERNAME}
+        - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+        - POSTGRES_DB=${DATABASE_NAME}
+        - PGPORT=${DATABASE_PORT}
+        - PGHOST=${DATABASE_HOST}
+      ports:
+        - ${DATABASE_PORT}:${DATABASE_PORT}
+      volumes:
+        - db-volume:/var/lib/postgresql/data
 
 networks:
   metaploy-private-network:
