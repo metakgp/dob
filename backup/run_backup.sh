@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
-echo "-- Database of Babel Backup START --"
+echo "-- Database of Babel Backup and Rotation START --"
 
 timestamp=$(date +%Y_%m_%d_%H_%M_%S)
 backup_to_dropbox="python3 /root/backup/backup_to_dropbox.py"
+rotate_backup="python3 /root/backup/rotate_backups.py"
 backups_dir="/root/backup/backups"
 dump_file="dob_dump_$timestamp.sql"
 backup_file="$dump_file.gz"
@@ -30,6 +31,18 @@ if ! $backup_to_dropbox $backup_file; then
 	exit 1
 fi
 
+# Dropbox backup rotation
+if ! $rotate_backup; then
+	echo "failed to rotate backups!"
+	# Notify Slack
+	if [[ -n "$SLACK_INCIDENTS_WH_URL" ]]; then
+		curl -s -H 'content-type: application/json' \
+			-d "{ \"text\": \"🔴DoB Dropbox backup rotation failure on ${timestamp}\" }" \
+			"$SLACK_INCIDENTS_WH_URL"
+	fi
+	exit 1
+fi
+
 # Delete local backups older than one week
 for file in ./*.gz; do
 	if [ $(($(date +%s) - $(date -r $file +%s))) -gt 604800 ]; then
@@ -37,4 +50,5 @@ for file in ./*.gz; do
 	fi
 done
 
-echo "-- Database of Babel Backup END --"
+
+echo "-- Database of Babel Backup and Rotation END --"
