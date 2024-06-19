@@ -18,7 +18,10 @@ RUN curl -fsSLO "$SUPERCRONIC_URL" \
 
 WORKDIR /root
 
+ARG DBPASSFILE
+
 COPY ./ ./backup
+COPY ${DBPASSFILE} ./.pgpass
 
 RUN pip3 install -qr ./backup/requirements.txt --break-system-packages
 

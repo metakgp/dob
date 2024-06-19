@@ -16,7 +16,10 @@ services:
       - db-volume:/var/lib/postgresql/data
 
   backup:
-    build: ./backup
+    build:
+      context: ./backup
+      args:
+        - DBPASSFILE=${DBPASSFILE}
     restart: always
     networks:
       metaploy-private-network:
@@ -25,7 +28,7 @@ services:
     environment:
       - PGHOST=database
       - POSTGRES_USER=${DATABASE_USERNAME}
-      - PGPASSFILE=${PGPASSFILE}
+      - PGPASSFILE=/root/.pgpass
       - DROPBOX_APP_KEY=${DROPBOX_APP_KEY}
       - DROPBOX_APP_SECRET=${DROPBOX_APP_SECRET}
       - DROPBOX_ACCESS_TOKEN=${DROPBOX_ACCESS_TOKEN}
