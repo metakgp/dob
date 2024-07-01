@@ -1,24 +1,26 @@
 services:
-  database:
-      image: postgres
-      restart: always
-      networks:
-        metaploy-private-network:
-          aliases:
-            - postgres-of-babel
-      environment:
-        - POSTGRES_USER=${DATABASE_USERNAME}
-        - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-        - POSTGRES_DB=${DATABASE_NAME}
-        - PGPORT=${DATABASE_PORT}
-        - PGHOST=${DATABASE_HOST}
-      volumes:
-        - db-volume:/var/lib/postgresql/data
+    database:
+        image: metakgporg/dob
+        container_name: dob
+        build: .
+        networks:
+            metaploy-private-network:
+                aliases:
+                    - postgres-of-babel
+        environment:
+            - POSTGRES_USER=${DATABASE_USERNAME}
+            - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+            - POSTGRES_DB=${DATABASE_NAME}
+            - PGPORT=${DATABASE_PORT}
+            - PGHOST=${DATABASE_HOST}
+        volumes:
+            - db-volume:/var/lib/postgresql/data
+        restart: always
 
 networks:
-  metaploy-private-network:
-    external: true
-    name: metaploy-private-network
+    metaploy-private-network:
+        external: true
+        name: metaploy-private-network
 
 volumes:
-  db-volume:
+    db-volume:
