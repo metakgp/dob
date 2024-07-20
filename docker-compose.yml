@@ -1,26 +1,48 @@
 services:
-    database:
-        image: metakgporg/dob
-        container_name: dob
-        build: .
-        networks:
-            metaploy-private-network:
-                aliases:
-                    - postgres-of-babel
-        environment:
-            - POSTGRES_USER=${DATABASE_USERNAME}
-            - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-            - POSTGRES_DB=${DATABASE_NAME}
-            - PGPORT=${DATABASE_PORT}
-            - PGHOST=${DATABASE_HOST}
-        volumes:
-            - db-volume:/var/lib/postgresql/data
-        restart: always
+  database:
+    image: metakgporg/dob
+    container_name: dob
+    build: .
+    networks:
+      metaploy-private-network:
+        aliases:
+          - postgres-of-babel
+    environment:
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+      - PGPORT=${DATABASE_PORT}
+      - PGHOST=${DATABASE_HOST}
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+    restart: always
+
+  backup:
+    build:
+      context: ./backup
+      args:
+        - DBPASSFILE=${DBPASSFILE}
+    restart: always
+    networks:
+      metaploy-private-network:
+    depends_on:
+      - database
+    environment:
+      - PGHOST=database
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - PGPASSFILE=/root/.pgpass
+      - DROPBOX_APP_KEY=${DROPBOX_APP_KEY}
+      - DROPBOX_APP_SECRET=${DROPBOX_APP_SECRET}
+      - DROPBOX_ACCESS_TOKEN=${DROPBOX_ACCESS_TOKEN}
+      - DROPBOX_REFRESH_TOKEN=${DROPBOX_REFRESH_TOKEN}
+      - SLACK_INCIDENTS_WH_URL=${SLACK_INCIDENTS_WH_URL}
+    volumes:
+      - db-volume:/var/lib/postgresql/data
 
 networks:
-    metaploy-private-network:
-        external: true
-        name: metaploy-private-network
+  metaploy-private-network:
+    external: true
+    name: metaployprivate- -network
 
 volumes:
-    db-volume:
+  db-volume:
