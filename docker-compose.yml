@@ -42,7 +42,7 @@ services:
 networks:
   metaploy-private-network:
     external: true
-    name: metaployprivate- -network
+    name: metaploy-private-network
 
 volumes:
   db-volume:
