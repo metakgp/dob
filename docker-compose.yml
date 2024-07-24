@@ -19,7 +19,8 @@ services:
 
   backup:
     build:
-      context: ./backup
+      context: ./
+      dockerfile: ./backup/Dockerfile
       args:
         - DBPASSFILE=${DBPASSFILE}
     restart: always
