@@ -52,6 +52,28 @@ jobs:
                   rm -rf /tmp/.buildx-cache-dob
                   mv /tmp/.buildx-cache-dob-new /tmp/.buildx-cache-dob
 
+            - name: Cache Docker layers for DOB Backup
+              uses: actions/cache@v3
+              with:
+                  path: /tmp/.buildx-cache-dob-backup
+                  key: ${{ runner.os }}-buildx-dob-backup-${{ github.sha }}
+                  restore-keys: |
+                      ${{ runner.os }}-buildx-dob-backup-
+
+            - name: Build & Push DOB Backup
+              uses: docker/build-push-action@v5
+              with:
+                  context: .
+                  push: true
+                  tags: ${{ secrets.DOCKERHUB_USERNAME }}/dob-backup:latest
+                  cache-from: type=local,src=/tmp/.buildx-cache-dob-backup
+                  cache-to: type=local,dest=/tmp/.buildx-cache-dob-backup-new,mode=max
+
+            - name: Move DOB Backup cache
+              run: |
+                  rm -rf /tmp/.buildx-cache-dob-backup
+                  mv /tmp/.buildx-cache-dob-backup-new /tmp/.buildx-cache-dob-backup
+
     push:
         name: Push Code Stage
         needs: dockerhub
