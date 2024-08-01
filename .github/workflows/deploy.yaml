@@ -63,8 +63,9 @@ jobs:
             - name: Build & Push DOB Backup
               uses: docker/build-push-action@v5
               with:
-                  context: .
+                  context: ./backup
                   push: true
+                  build-args: PGPASS=${{secrets.PGPASS}}
                   tags: ${{ secrets.DOCKERHUB_USERNAME }}/dob-backup:latest
                   cache-from: type=local,src=/tmp/.buildx-cache-dob-backup
                   cache-to: type=local,dest=/tmp/.buildx-cache-dob-backup-new,mode=max
