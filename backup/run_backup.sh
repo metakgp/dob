@@ -12,7 +12,7 @@ backup_file="$dump_file.gz"
 mkdir -p "${backups_dir}"
 cd "$backups_dir"
 
-if ! pg_dumpall -U $POSTGRES_USER --no-password >$dump_file; then
+if ! PGPASSWORD=$POSTGRES_PASSWORD pg_dumpall -U $POSTGRES_USER >$dump_file; then
 	echo "pgdump failure!"
 	exit 1
 fi
