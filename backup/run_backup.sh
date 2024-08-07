@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo -e "\n-- Database of Babel Backup and Rotation START --\n"
+echo -e "\n-- Backup and Rotation started at `date +"%Y/%m/%d %H:%M:%S"` --\n"
 
 timestamp=$(date +%Y_%m_%d_%H_%M_%S)
 backup_to_dropbox="python3 /root/backup/backup_to_dropbox.py"
@@ -50,4 +50,4 @@ if ! $backup_to_dropbox $backup_file; then
 	exit 1
 fi
 
-echo -e "\n-- Database of Babel Backup and Rotation END --\n"
+echo -e "\n-- Backup and Rotation finisned at `date +"%Y/%m/%d %H:%M:%S"` --\n"
