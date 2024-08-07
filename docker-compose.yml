@@ -18,9 +18,11 @@ services:
     restart: always
 
   backup:
+    image: metakgporg/dob-backup
+    container_name: dob-backup
     build:
-      context: ./
-      dockerfile: ./backup/Dockerfile
+      context: ./backup
+      dockerfile: Dockerfile
       args:
         - DBPASSFILE=${DBPASSFILE}
     restart: always
