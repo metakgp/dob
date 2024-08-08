@@ -50,4 +50,4 @@ if ! $backup_to_dropbox $backup_file; then
 	exit 1
 fi
 
-echo -e "\n-- Backup and Rotation finisned at `date +"%Y/%m/%d %H:%M:%S"` --\n"
+echo -e "\n-- Backup and Rotation finished at `date +"%Y/%m/%d %H:%M:%S"` --\n"
