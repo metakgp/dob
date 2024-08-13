@@ -33,12 +33,12 @@ try:
         else:
             result = client.files_list_folder_continue(cursor=cursor)
         cursor = result.cursor
-        has_more_files = result.has_more
-        files.extend(result.entries)
 
-    for file in files:
-        if file.name.find("dob_dump") == -1:
-            files.remove(file)
+        for file in result.entries:
+            if file.name.find("dob_dump") == 0:
+                files.append(file)
+
+        has_more_files = result.has_more
 
     number_of_files = len(files)
     print(f"{number_of_files} backup files found.")
