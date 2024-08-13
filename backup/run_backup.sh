@@ -3,9 +3,9 @@
 echo -e "\n-- Backup and Rotation started at `date +"%Y/%m/%d %H:%M:%S"` --\n"
 
 timestamp=$(date +%Y_%m_%d_%H_%M_%S)
-backup_to_dropbox="python3 /root/backup/backup_to_dropbox.py"
-rotate_backup="python3 /root/backup/rotate_backups.py"
-backups_dir="/root/backup/backups"
+backup_to_dropbox="python3 /backup/backup_to_dropbox.py"
+rotate_backup="python3 /backup/rotate_backups.py"
+backups_dir="/backup/backups"
 dump_file="dob_dump_$timestamp.sql"
 backup_file="$dump_file.gz"
 

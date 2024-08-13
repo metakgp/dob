@@ -2,8 +2,8 @@ FROM postgres:16
 
 RUN apt-get update && apt-get install -y curl python3 python3-pip gzip
 
-WORKDIR /root
+WORKDIR /backup
 
-COPY ./backup ./backup
+COPY ./backup .
 
-RUN pip3 install -qr ./backup/requirements.txt --break-system-packages
+RUN pip3 install -qr requirements.txt --break-system-packages

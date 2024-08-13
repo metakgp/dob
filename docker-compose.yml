@@ -24,10 +24,10 @@ services:
       test:
         [
           "CMD-SHELL",
-          "/root/backup/run_backup.sh >> /var/log/backups.log 2>&1 || exit 1",
+          "/backup/run_backup.sh >> /var/log/pg_dump.log 2>&1 || exit 1",
         ]
       interval: 24h
-      timeout: 30s
+      timeout: 2m
       retries: 5
     restart: always
 
