@@ -1,1 +1,0 @@
-20 4 * * * /root/backup/run_backup.sh >> /var/log/backups.log 2>&1

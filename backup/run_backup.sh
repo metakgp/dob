@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
-echo -e "\n-- Database of Babel Backup and Rotation START --\n"
+echo -e "\n-- Backup and Rotation started at `date +"%Y/%m/%d %H:%M:%S"` --\n"
 
 timestamp=$(date +%Y_%m_%d_%H_%M_%S)
-backup_to_dropbox="python3 /root/backup/backup_to_dropbox.py"
-rotate_backup="python3 /root/backup/rotate_backups.py"
-backups_dir="/root/backup/backups"
+backup_to_dropbox="python3 /backup/backup_to_dropbox.py"
+rotate_backup="python3 /backup/rotate_backups.py"
+backups_dir="/backup/backups"
 dump_file="dob_dump_$timestamp.sql"
 backup_file="$dump_file.gz"
 
 mkdir -p "${backups_dir}"
 cd "$backups_dir"
 
-if ! pg_dumpall -U $POSTGRES_USER --no-password >$dump_file; then
+if ! PGPASSWORD=$POSTGRES_PASSWORD pg_dumpall -U $POSTGRES_USER >$dump_file; then
 	echo "pgdump failure!"
 	exit 1
 fi
@@ -50,4 +50,4 @@ if ! $backup_to_dropbox $backup_file; then
 	exit 1
 fi
 
-echo -e "\n-- Database of Babel Backup and Rotation END --\n"
+echo -e "\n-- Backup and Rotation finished at `date +"%Y/%m/%d %H:%M:%S"` --\n"

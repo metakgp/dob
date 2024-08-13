@@ -13,25 +13,6 @@ services:
       - POSTGRES_DB=${DATABASE_NAME}
       - PGPORT=${DATABASE_PORT}
       - PGHOST=${DATABASE_HOST}
-    volumes:
-      - db-volume:/var/lib/postgresql/data
-    restart: always
-
-  backup:
-    build:
-      context: ./
-      dockerfile: ./backup/Dockerfile
-      args:
-        - DBPASSFILE=${DBPASSFILE}
-    restart: always
-    networks:
-      metaploy-private-network:
-    depends_on:
-      - database
-    environment:
-      - PGHOST=database
-      - POSTGRES_USER=${DATABASE_USERNAME}
-      - PGPASSFILE=/root/.pgpass
       - DROPBOX_APP_KEY=${DROPBOX_APP_KEY}
       - DROPBOX_APP_SECRET=${DROPBOX_APP_SECRET}
       - DROPBOX_ACCESS_TOKEN=${DROPBOX_ACCESS_TOKEN}
@@ -39,6 +20,16 @@ services:
       - SLACK_INCIDENTS_WH_URL=${SLACK_INCIDENTS_WH_URL}
     volumes:
       - db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/backup/run_backup.sh >> /var/log/pg_dump.log 2>&1 || exit 1",
+        ]
+      interval: 24h
+      timeout: 2m
+      retries: 5
+    restart: always
 
 networks:
   metaploy-private-network:
